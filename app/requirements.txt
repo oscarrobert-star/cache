@@ -1,0 +1,4 @@
+Flask==2.2.5
+google-cloud-secret-manager==2.16.2
+google-cloud-pubsub==2.19.1
+psycopg2-binary==2.9.9
