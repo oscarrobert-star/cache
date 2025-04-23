@@ -210,25 +210,29 @@ SOC 2 compliance is achieved by aligning the infrastructure with key security pr
 
 ### 5.1 **Security**
 - **IAM**: Access is granted based on the least privilege principle, with roles tightly controlling what resources can be accessed.
-- **Secrets Management**: Sensitive data is encrypted and stored securely in Google Secret Manager.
-- **Audit Logs**: All critical actions are logged for auditing and monitoring purposes.
-- **Encryption**: Data is encrypted both at rest and in transit.
+- **Secrets Management**: Sensitive data is encrypted and stored securely in **Google Secret Manager**.
+- **Audit Logs**: All critical actions are logged using **Cloud Audit Logs** for auditing and monitoring purposes.
+- **Encryption**: Data is encrypted both **at rest and in transit** using **Google-managed encryption keys** and **SSL Certificates**.
+- **Version Control**: All infrastructure and application code is versioned using **Git**, allowing traceability and accountability for all changes.
+- **Infrastructure as Code (IaC)**: The environment is provisioned and managed using **Terraform**, ensuring reproducibility, change control, and compliance with approved configurations.
 
 ### 5.2 **Availability**
-- **Cloud Run**: Automatically scales based on traffic, ensuring high availability.
-- **Cloud SQL**: Database is configured with automatic backups and failover to ensure availability.
+- **Cloud Run**: Automatically scales based on traffic, ensuring high availability. The maximum number of instances is capped at 4 to manage cost and performance predictability.
+- **Cloud SQL**: [⚠️] *Note: Automatic backups and failover are currently **not configured**. For SOC 2 alignment, it is recommended to enable these features to ensure database resilience and recovery capabilities.*
 
 ### 5.3 **Processing Integrity**
-- **Cloud Pub/Sub**: Provides reliable message delivery, ensuring processing integrity.
-- **Database Transactions**: All database operations are wrapped in transactions to ensure data consistency.
+- **Cloud Pub/Sub**: Provides **reliable message delivery**, ensuring processing integrity in asynchronous workflows.
+- **Database Transactions**: All critical database operations are **wrapped in transactions** to ensure data consistency and rollback on failure.
+- **CI/CD Pipelines**: Code is deployed through **automated CI/CD workflows**, which enforce code reviews, testing, and deployment standards.
 
 ### 5.4 **Confidentiality**
-- **Data Encryption**: All sensitive data is encrypted using Google-managed encryption keys.
-- **Access Control**: Strict access control policies ensure that only authorized users and services can access sensitive data.
+- **Data Encryption**: All sensitive data is encrypted using **Google-managed encryption keys**.
+- **Access Control**: Strict policies (e.g., **IAM roles**, **service accounts**) ensure that only authorized users and services can access sensitive data.
+- **Environment Isolation**: Separate environments (e.g., dev, staging, production) are used to limit data exposure during testing.
 
 ### 5.5 **Privacy**
 - **Data Minimization**: Only necessary data is collected and stored.
-- **User Consent**: Where applicable, user consent is obtained for the collection of personal information.
+- **No PII Collected**: The application is designed to **avoid collection of Personally Identifiable Information (PII)**, reducing privacy risks.
 
 ## 6. **Compliance and Monitoring**
 

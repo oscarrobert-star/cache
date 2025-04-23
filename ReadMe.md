@@ -305,6 +305,13 @@ The workflow requires several GitHub secrets to be set:
 - Secrets must be stored in GitHub’s encrypted secrets manager.
 - Ensure access to GitHub Actions is restricted to authorized personnel.
 
+### 10 **Centralized Logging & Auditability**
+
+- All application and infrastructure logs are automatically pushed to **Google Cloud Logging (formerly Stackdriver)**, enabling **centralized logging** across the stack.
+- This includes structured logs from Cloud Run, GCP services, and audit trails for administrative and user actions.
+- **Cloud Audit Logs** are enabled by default, capturing actions like IAM changes, API calls, and service modifications for full traceability.
+- Logging is automatically activated by the infrastructure setup — enabling the **Cloud Logging API** as part of Terraform provisioning ensures no extra manual configuration is needed.
+- Logs are accessible and searchable in **Cloud Logging Explorer**, allowing teams to efficiently monitor activity, diagnose issues, and respond to incidents.
 
 
 ## Cleanup
