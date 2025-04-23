@@ -32,7 +32,7 @@ jobs:
       - name: Build Docker image
         run: |
           IMAGE_TAG="$REGION-docker.pkg.dev/adept-parsec-457612-q6/staging-app-repo/app:$COMMIT"
-          docker build -t $IMAGE_TAG .
+          docker build -t $IMAGE_TAG -f app/Dockerfile .
         
       - name: Push Docker image to Google Container Registry
         run: |
