@@ -53,8 +53,8 @@ This infrastructure is provisioned and managed using **Terraform**, and it inclu
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/gcp-flask-app/cache.git
-cd gcp-flask-app/terraform/environments/staging
+git clone https://github.com/oscarrobert-star/cache.git
+cd cache/terraform/environments/staging
 ```
 
 ### 2. Configure Terraform Variables
