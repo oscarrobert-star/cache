@@ -122,6 +122,7 @@ gcloud services enable \
 ```
 
 ### 5. Plan and Apply Terraform Configuration
+> To apply this successfully, you need to first build the application image and update the image url in you tfvars file.
 
 Apply the Terraform configuration to create the resources in Google Cloud:
 
@@ -138,6 +139,7 @@ This will provision the following resources:
 - IAM Service Account for Cloud Run
 - Cloud Run Service
 - Artifact Registry (for storing Docker images)
+
 
 ### 6. Application Configuration and Deployment
 
@@ -249,41 +251,43 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     env:
-      REGION: ${{ secrets.GCP_REGION }} 
+      REGION: ${{ secrets.GCP_REGION }}
+      COMMIT: ${{ github.sha }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        
+
+      - name: Set up Google Cloud Authentication
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
       - name: Set up Google Cloud CLI
-        uses: google-github-actions/setup-gcloud@v3
+        uses: google-github-actions/setup-gcloud@v1
         with:
           version: 'latest'
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
       - name: Authenticate Docker to Google Cloud
-        run: gcloud auth configure-docker $REGION-docker.pkg.dev
+        run: gcloud auth configure-docker $REGION-docker.pkg.dev --quiet
 
       - name: Build Docker image
         run: |
-          COMMIT_HASH=$(git rev-parse --short HEAD)
-          IMAGE_TAG="$REGION-docker.pkg.dev/adept-parsec-457612-q6/staging-app-repo/app:$COMMIT_HASH"
-          docker build -t $IMAGE_TAG .
-        
+          IMAGE_TAG="$REGION-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/staging-app-repo/app:$COMMIT"
+          docker build -t $IMAGE_TAG -f app/Dockerfile app/
+
       - name: Push Docker image to Google Container Registry
         run: |
-          COMMIT_HASH=$(git rev-parse --short HEAD)
-          IMAGE_TAG="$REGION-docker.pkg.dev/adept-parsec-457612-q6/staging-app-repo/app:$COMMIT_HASH"
+          IMAGE_TAG="$REGION-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/staging-app-repo/app:$COMMIT"
           docker push $IMAGE_TAG
 
       - name: Deploy to Google Cloud Run
         run: |
-          COMMIT_HASH=$(git rev-parse --short HEAD)
-          IMAGE_TAG="$REGION-docker.pkg.dev/adept-parsec-457612-q6/staging-app-repo/app:$COMMIT_HASH"
+          IMAGE_TAG="$REGION-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/staging-app-repo/app:$COMMIT"
           gcloud run services update staging-app --image $IMAGE_TAG --platform managed --region $REGION
 ```
 
