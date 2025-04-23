@@ -3,7 +3,7 @@
 
 # Improvements
 
-This section outlines potential improvements to enhance the infrastructure, CI/CD processes, and observability of the project. These are suggestions for scaling, production-hardening, and better operational practices.
+This section outlines potential improvements to enhance the infrastructure, CI/CD processes, and observability of the project. 
 
 ---
 
