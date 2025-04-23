@@ -1,0 +1,60 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    waitFor: ['-']
+    env:
+      - COMMIT=$SHORT_SHA
+      - REGION=${_REGION}
+      - PROJECT_ID=${_PROJECT_ID}
+      - REPOSITORY=staging-app-repo
+      - IMAGE_NAME=app
+    args:
+      - build
+      - '--tag'
+      - '${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${IMAGE_NAME}:${COMMIT}'
+      - '--tag'
+      - '${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${IMAGE_NAME}:latest'
+      - '-f'
+      - app/Dockerfile
+      - app/
+  - name: 'gcr.io/cloud-builders/docker'
+    waitFor:
+      - '-'
+    env:
+      - COMMIT=$SHORT_SHA
+      - REGION=${_REGION}
+      - PROJECT_ID=${_PROJECT_ID}
+      - REPOSITORY=staging-app-repo
+      - IMAGE_NAME=app
+    args:
+      - push
+      - '${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${IMAGE_NAME}:${COMMIT}'
+  - name: 'gcr.io/cloud-builders/docker'
+    waitFor:
+      - '-'
+    env:
+      - COMMIT=$SHORT_SHA
+      - REGION=${_REGION}
+      - PROJECT_ID=${_PROJECT_ID}
+      - REPOSITORY=staging-app-repo
+      - IMAGE_NAME=app
+    args:
+      - push
+      - '${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${IMAGE_NAME}:latest'
+  - name: 'gcr.io/google-cloud-sdk'
+    waitFor:
+      - '-'
+    entrypoint: gcloud
+    args:
+      - run
+      - services
+      - update
+      - staging-app
+      - '--image'
+      - '${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${IMAGE_NAME}:latest'
+      - '--platform'
+      - managed
+      - '--region'
+      - '${REGION}'
+substitutions:
+  _REGION: '<your-region>' 
+  _PROJECT_ID: '<your-gcp-project-id>' 
