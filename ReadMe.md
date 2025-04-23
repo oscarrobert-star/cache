@@ -310,7 +310,7 @@ The workflow requires several GitHub secrets to be set:
 - All application and infrastructure logs are automatically pushed to **Google Cloud Logging (formerly Stackdriver)**, enabling **centralized logging** across the stack.
 - This includes structured logs from Cloud Run, GCP services, and audit trails for administrative and user actions.
 - **Cloud Audit Logs** are enabled by default, capturing actions like IAM changes, API calls, and service modifications for full traceability.
-- Logging is automatically activated by the infrastructure setup — enabling the **Cloud Logging API** as part of Terraform provisioning ensures no extra manual configuration is needed.
+- Logging is automatically activated by the infrastructure setup — enabling the **Cloud Logging API** as part of Terraform provisioning ensures no extra manual configuration is needed. [See section on enabling google cloud service APIs](#enable-apis-using-gcloud-cli)
 - Logs are accessible and searchable in **Cloud Logging Explorer**, allowing teams to efficiently monitor activity, diagnose issues, and respond to incidents.
 
 
