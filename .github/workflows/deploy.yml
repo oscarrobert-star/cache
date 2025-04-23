@@ -36,6 +36,9 @@ jobs:
         
       - name: Push Docker image to Google Container Registry
         run: |
+          # Authenticate Docker to Google Container Registry
+          gcloud auth configure-docker $REGION-docker.pkg.dev
+          # Push the Docker image to Google Container Registry
           IMAGE_TAG="$REGION-docker.pkg.dev/adept-parsec-457612-q6/staging-app-repo/app:$COMMIT"
           docker push $IMAGE_TAG
 
