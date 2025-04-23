@@ -207,20 +207,6 @@ The Flask app exposes the following routes:
 - **`/fetch`**:
   - **GET**: Fetches messages from the Pub/Sub subscription and returns them as a JSON response.
 
-## Managing Logs with Cloud Logging
-
-The application integrates logging that is forwarded to **Google Cloud Logging** for log management and visualization. Cloud Logging provides the following benefits:
-
-1. **Centralized log management**: All logs are captured and can be queried and filtered easily within Google Cloud Console.
-2. **Simplified setup**: Using Cloud Logging avoids the complexity of setting up an ELK stack, while still providing rich log management capabilities.
-3. **Log Monitoring**: Logs can be used to create alerts, monitor application health, and troubleshoot issues.
-
-In the Flask app, logs are sent to **Google Cloud Logging** by default. You can query, visualize, and create dashboards for application logs directly in the Cloud Console.
-
-Here's a section you can add to your `README.md` or `infra-docs.md` to document the GitHub Actions workflow for building and deploying to Google Cloud Run:
-
-
-
 ### 9. **CI/CD Workflow with GitHub Actions**
 
 A GitHub Actions workflow is used to automate the process of building and deploying the application to **Google Cloud Run** whenever changes are pushed to the `main` branch. This ensures consistent and reliable deployments with minimal manual intervention.
@@ -305,13 +291,20 @@ The workflow requires several GitHub secrets to be set:
 - Secrets must be stored in GitHub’s encrypted secrets manager.
 - Ensure access to GitHub Actions is restricted to authorized personnel.
 
-### 10 **Centralized Logging & Auditability**
+## 10 Managing Logs with Cloud Logging
 
-- All application and infrastructure logs are automatically pushed to **Google Cloud Logging (formerly Stackdriver)**, enabling **centralized logging** across the stack.
-- This includes structured logs from Cloud Run, GCP services, and audit trails for administrative and user actions.
-- **Cloud Audit Logs** are enabled by default, capturing actions like IAM changes, API calls, and service modifications for full traceability.
-- Logging is automatically activated by the infrastructure setup — enabling the **Cloud Logging API** as part of Terraform provisioning ensures no extra manual configuration is needed. [See section on enabling google cloud service APIs](#enable-apis-using-gcloud-cli)
-- Logs are accessible and searchable in **Cloud Logging Explorer**, allowing teams to efficiently monitor activity, diagnose issues, and respond to incidents.
+####  **Centralized Logging & Auditability**
+
+The application integrates with **Google Cloud Logging** (formerly Stackdriver) for comprehensive, centralized log management across all services.
+
+#### Key Benefits:
+1. **Centralized Log Management**: Application and infrastructure logs — including those from Cloud Run, GCP services, and the Flask app — are automatically forwarded to Cloud Logging, making them easily queryable and filterable via the Google Cloud Console.
+2. **Auditability**: **Cloud Audit Logs** are enabled by default, capturing critical actions such as IAM role changes, API requests, and system-level operations, ensuring full traceability.
+3. **Simplified Setup**: Logging is automatically activated during infrastructure provisioning. Enabling the **Cloud Logging API** as part of the Terraform setup ensures no manual configuration is required. [See section on enabling Google Cloud service APIs](#enable-apis-using-gcloud-cli)
+4. **Monitoring & Alerting**: Logs can be used to create monitoring dashboards and alert policies, supporting observability and operational readiness.
+5. **ELK Stack Alternative**: Cloud Logging eliminates the overhead of managing a self-hosted logging stack while still offering rich features for log ingestion, visualization, and retention.
+
+All logs can be searched, visualized, and analyzed directly in **Cloud Logging Explorer**, supporting efficient debugging and real-time insight into system behavior.
 
 
 ## Cleanup
